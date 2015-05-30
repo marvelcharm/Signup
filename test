@@ -1,0 +1,664 @@
+<? ini_set('memory_limit', '64M'); ?>
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1251" />
+<meta property="vk:app_id" content="4936298" />
+<meta property="vk:api_url" content="api.vk.com" />
+<link rel="stylesheet" type="text/css" href="http://st0.userapi.com/css/al/common.css?327" />
+<!--[if lte IE 6]><style type="text/css" media="screen">/* <![CDATA[ */ @import url(http://st0.userapi.com/css/al/ie6.css?24); /* ]]> */</style><![endif]-->
+<!--[if IE 7]><style type="text/css" media="screen">/* <![CDATA[ */ @import url(http://st0.userapi.com/css/al/ie7.css?18); /* ]]> */</style><![endif]-->
+
+<link type="text/css" rel="stylesheet" href="http://st0.userapi.com/css/al/profile_edit.css?25"></link>
+<link type="text/css" rel="stylesheet" href="http://st0.userapi.com/css/ui_controls.css?32"></link>
+
+<STYLE type=text/css MEDIA=screen>
+ /* message box*/
+ .box_frame{
+   left: 50%;
+   position: absolute;
+ }
+ .popup_box_container {
+   position: absolute;
+   left: 50%;
+   z-index: 1002;
+ }
+
+ td, body {
+    color: rgb(0, 0, 0);
+    direction: ltr;
+    font-family: tahoma,arial,verdana,sans-serif,Lucida Sans;
+    font-size: 11px;
+    font-weight: normal;
+ }
+ 
+ .label {text-align: right; float: left; color: rgb(85, 85, 85); padding: 4px 5px 0px 0px}
+ .row {padding-bottom: 3px}
+ .b_controls {padding: 4px 0px 3px; height: 30px; border-top: 1px solid rgb(218, 225, 232)}
+ .upl_f {cursor: pointer}
+ textarea {resize: none;}
+
+ .error_message {
+   width: 110px; height:13px; vertical-align: middle; top:100px;
+   text-align: center; z-index: 4000; position: absolute;
+   background-color: white; visibility: hidden;
+ }
+
+ .wait {width: 110px; height:8px; vertical-align: middle; top:102px;
+          text-align: center; z-index: 2000; position: absolute;
+ }
+ .preview {width: 110px; height:110px; vertical-align: middle;
+          text-align: center; z-index: 3000; position: absolute;
+ }
+ .td_preview {
+   width: 118px; height: 118px; padding: 4px;
+   text-align: center; vertical-align: middle;
+   background-image: url(http://st0.userapi.com/images/upload_inv.gif); background-repeat: no-repeat; background-position: center;
+ }
+ .div_preview {
+   width: 110px; height: 110px; z-index: 5000;
+   text-align: center; vertical-align: middle;
+   zzzoverflow: hidden; 
+ }
+
+ .menu_div {
+   width: 110px; height:25px; vertical-align: middle; overflow: hidden; 
+   text-align: left; position: absolute;
+   visibility: hidden; display: hidden; 
+ }
+ .menu_fl {position: absolute;}
+ .menu_bg {
+   position: absolute; height: 25px;
+   background-color: black; opacity: 0.5; zzzvisibility: hidden;
+ }
+ .menu_text {
+   line-height: 25px; 
+   text-align: center; position: absolute;
+   zzzvisibility: hidden; opacity: 1 !important; color: white;
+ }
+
+ .disabled {font-size: 8px}  //zzz
+ .cf {display: block}        //zzz
+
+</STYLE>
+
+12345
+
+<!-- ïîäêëþ÷àåì xd_connection.js -->
+<script src="http://vkontakte.ru/js/api/xd_connection.js?2" type="text/javascript"></script>
+<script type="text/javascript" src="http://vk.com/js/common.js"></script>
+<script type="text/javascript" src="http://vk.com/js/lib/ui_controls.js"></script>
+<script type="text/javascript" src="http://userapi.com/js/api/openapi.js?52"></script>
+<!---------------------------------------------------->
+
+<script type="text/javascript" charset="cp1251" >
+
+function el(element){return document.getElementById(element)}
+
+var cities = [[158,'×åëÿáèíñê'],[5098,'Êîïåéñê','×åëÿáèíñêàÿ îáë.'],[12126,'Êîðêèíî','×åëÿáèíñêàÿ îáë.'],[1268,'Þæíîóðàëüñê','×åëÿáèíñêàÿ îáë.']];
+var countries = [[1,'Ðîññèÿ'],[2,'Óêðàèíà'],[3,'Áåëîðóññèÿ']];
+var bdays = new Array(); for(i = 1; i <= 31; ++i) bdays.push(i);
+var bmonths = [[1,'ßíâàðÿ'],[2,'Ôåâðàëÿ'],[3,'Ìàðòà'],[4,'Àïðåëÿ'],[5,'Ìàÿ'],[6,'Èþíÿ'],[7,'Èþëÿ'],[8,'Àâãóñòà'],[9,'Ñåíòÿáðÿ'],[10,'Îêòÿáðÿ'],[11,'Íîÿáðÿ'],[12,'Äåêàáðÿ']];
+var byears = new Array(); for(i = 2006; i >= 1950; i--) byears.push(i);
+var asex =  [[1, 'æåíñêèé'], [2, 'ìóæñêîé'], [0, '- Íå âûáðàí -']];
+var arelation = [ 
+                 [[1, 'Íå â áðàêå'],[2, 'Åñòü äðóã/ïîäðóãà'],[3, 'Ïîìîëâëåí(à)'],[4, 'Æåíàò(Çàìóæåì)'],[5, 'Âñ¸ ñëîæíî'],[6, 'Â àêòèâíîì ïîèñêå'],[7, 'Âëþáë¸í(à)']], 
+                 [[1, 'Íå çàìóæåì'],[2, 'Åñòü äðóã'],[3, 'Ïîìîëâëåíà'],[4, 'Çàìóæåì'],[5, 'Âñ¸ ñëîæíî'],[6, 'Â àêòèâíîì ïîèñêå'],[7, 'Âëþáëåíà']],
+                 [[1, 'Íå æåíàò'],[2, 'Åñòü ïîäðóãà'],[3, 'Ïîìîëâëåí'],[4, 'Æåíàò'],[5, 'Âñ¸ ñëîæíî'],[6, 'Â àêòèâíîì ïîèñêå'],[7, 'Âëþáë¸í']]
+                ];
+var aethnicity = ['Åâðîïåéñêàÿ','Ñëàâÿíñêàÿ','Àçèàòñêàÿ','Àôðèêàíñêàÿ'];
+var ahaircolor = ['Áðþíåò','Øàòåí','Ðûæèé','Ðóñûé','Áëîíäèí','Ñåäîé'];
+var aeyecolor = ['Ñèíèé','Ãîëóáîé','Ñåðûé','Çåë¸íûé','ßíòàðíûé','Áîëîòíûé','Êàðèé','×¸ðíûé'];
+var ashoe_size = ['35','35.5','36','36.5','37','37.5','38','38.5','39','39.5','40','40.5','41','41.5','42','42.5','43','43.5','44'];
+var aclothing_size = [[1,'XS'],[2,'S'],[3,'M'],[4,'L'],[5,'XL'],[6,'XXL'],[7,'XXXL']];
+var ayesno = ['Äà','Íåò'];
+var apresence = ['Åñòü','Íåò'];
+var askill = ['Îïûòà íåò','Íà÷èíàþùèé','Ñïåöèàëèñò','Ïðîôåññèîíàë'];
+var aerotic=['Íåäîïóñòèìà','Òîëüêî íèæíåå áåëü¸','Òîëüêî òîïëåññ','Âîçìîæíà'];
+var aready_relocate = ['Äà','Íåò','Ïî äîãîâîð¸ííîñòè'];
+var crlf = '<br>';
+var viewer_id = 0, viewer_sex = 0;
+var bdate_arr =[];
+var check_obj = [], style_obj = [], init_none = true;
+var picbox=''; sendbox='';
+
+//http://flapps.ru/forum/topic4755-10.html
+//http://flapps.ru/forum/topic2308.html
+//$resp = $VK->api('secure.sendNotification', array('uids'=>'1,2,3','message'=>'Ñîîáùåíèå'));
+//http://flapps.ru/forum/topic1317.html
+
+window.onload = (function() {                                                  // êîãäà çàãðóçèòñÿ âñÿ ñòðàíèöà
+
+  VK.init(function() {                                                         // èíèöèàëèçèðóåì Vk API
+  VK.callMethod("resizeWindow", 627, 500);
+//VK.callMethod('showInstallBox'); // Ïðîñèìñÿ óñòàíîâèòü. : )
+    var parts=document.location.search.substr(1).split("&");                   // óçíà¸ì flashVars, ïåðåäàííûå ïðèëîæåíèþ GET çàïðîñîì. 
+    var flashVars={}, curr;                                                    // Ñîõðàíÿåì èõ â ïåðåìåííóþ flashVars
+    for (i=0; i<parts.length; i++) {
+      curr = parts[i].split('=');
+      flashVars[curr[0]] = curr[1];                                             // çàïèñûâàåì â ìàññèâ flashVars çíà÷åíèÿ. Íàïðèìåð: flashVars['viewer_id'] = 1;
+    }
+ 
+    viewer_id = flashVars['viewer_id'];                                     // ïîëó÷àåì viewer_id èç ïîëó÷åííûõ ïåðåìåííûõ
+    VK.api("getProfiles", {uids:viewer_id,fields:"photo, city, country, bdate, sex, relation, contacts, connections"}, function(data) { // âûïîëíÿåì çàïðîñ ïîëó÷åíèÿ ïðîôèëÿ
+      el('ava').src            = data.response[0].photo;
+      el('vk_id').innerHTML    = 'Íîìåð àíêåòû ' + viewer_id;
+      el('first_name').value   = data.response[0].first_name; 
+      el('last_name').value    = data.response[0].last_name;
+      el('relation').value     = data.response[0].relation;
+      el('mobile_phone').value = data.response[0].mobile_phone;
+      viewer_sex               = data.response[0].sex;
+
+      // Òàìà - http://vk.com/js/lib/ui_controls.js
+      VK.api('places.getCountryById', {cids:data.response[0].country}, function(data1) {
+        Dropdown(el('country'), countries, {width: 85, autocomplete: true, enableCustom: false, selectedItems: data1.response[0].name})
+      })
+
+      VK.api('places.getCityById', {cids:data.response[0].city}, function(data1) {
+        Dropdown(el('city'), cities, {onchange: function(){alert('ggg');}, width: 97, noResult: "", introText: "Ìîæíî ââîäèòü âðó÷íóþ", autocomplete: true, enableCustom: true, selectedItems: data1.response[0].name})
+      })
+
+      bdate_text = (data.response[0].bdate === undefined) ? ' . . ': data.response[0].bdate;
+      bdate_arr = bdate_text.split('.');
+      Dropdown(el('bday'), bdays, {width: 55, autocomplete: true, enableCustom: false, selectedItems: bdate_arr[0]});
+      Dropdown(el('bmonth'), bmonths, {width: 95, autocomplete: true, enableCustom: false, selectedItems: bdate_arr[1]});
+      Dropdown(el('byear'), byears, {width: 60, autocomplete: true, enableCustom: true, selectedItems: bdate_arr[2]});
+
+      Autocomplete(el('nickname'), [''], {width: 110, noResult: "", introText: "Çàïîëíèòå ýòî ïîëå, åñëè õîòèòå ñêðûòü ôàìèëèþ", dropdown: false, multiselect: false, autocomplete: true, enableCustom: true,});
+
+      Dropdown(el('sex'), asex, {width: 90, autocomplete: true, enableCustom: false, selectedItems: viewer_sex});
+      Dropdown(el('relation'), arelation[viewer_sex], {width: 123, autocomplete: true, enableCustom: false, selectedItems: data.response[0].relation});
+
+      msgtext = '<B>Ïîëó÷åíî èç ïðîôèëÿ (BK id=' + viewer_id + '):</B>'+ crlf + 
+        client_data(data.response[0].first_name, data.response[0].last_name, data.response[0].nickname, data.response[0].sex,
+        data.response[0].bdate, data.response[0].country, data.response[0].city, data.response[0].mobile_phone) + crlf;
+
+      usergroups='<B>Ãðóïïû êëèåíòà:</B>'+ crlf;
+      VK.api('getGroupsFull', {}, function(data3) {
+        for (i in data3.response) {usergroups += (i + '. <a href=http://vk.com/club' + data3.response[i].gid + '>' + data3.response[i].name + '</a>' + crlf)}
+      });
+    });
+  });
+
+VK.Widgets.Like("vk_like", {width: 200, pageUrl: 'http://vk.com/app4936298', type: 'full'}); //
+
+});
+
+function client_data(first_name, last_name, nickname, sex, bdate, country, city, mobile_phone){
+//getCountry(data.response[0].country)
+  return 'Èìÿ: ' + first_name + ', Ôàìèëèÿ: '+ last_name + ', Ïñåâäîíèì: ' + nickname + crlf +
+         'Ïîë: ' + find2(asex, sex) + ', Äàòà ðîæäåíèÿ: ' + bdate + crlf +
+         'Ñòðàíà: ' + country + ', Ãîðîä: ' + city + ', Òåëåôîí: ' + mobile_phone;
+}
+
+function find2(arr, value) { for (var i = 0; i < arr.length; i++) if (arr[i][0] == value) return arr[i][1]}
+
+function data_t(arg){
+    alert('func data_t bef=' + country_name);
+    country_name = arg.response[0].name;
+    alert('func data_t aft=' + country_name);
+    return arg.response[0].name;
+}
+
+function getCountry(code) {
+  alert('code1='+code)
+//  VK.api('places.getCountryById', {cids:code}, function(data1) {
+//    country_name = data1.response[0].name
+//    alert('code2=' + country_name)
+//  })
+  VK.api('places.getCountryById', {cids:code}, data_t)
+  alert('func getCountry ret=' + country_name)
+  return country_name;
+}
+
+function test1(){
+//var ts = Math.round((new Date()).getTime() / 1000);                                  //unix time
+//VK.callMethod("showRequestBox", "143147866", "Óâåäîìëÿåì Âàñ. : )", "25944961-1");   //Îòïðàâèòü óâåäîìëåíèå äðóãó
+VK.callMethod('showInstallBox'); 
+//VK.callMethod("showSettingsBox", 0);
+//guiMessageBox(el('country').value,el('country').value>=0);
+}
+
+function test(){
+  var info = '';
+  VK.api("getProfiles", {uids:el('viewer_id').value, fields:"uid, first_name, last_name, nickname, screen_name, sex, bdate, birthdate, city, country, timezone, photo, photo_medium, photo_big, has_mobile, rate, contacts, education, online, counters"}, function(data) { // âûïîëíÿåì çàïðîñ ïîëó÷åíèÿ ïðîôèëÿ
+    for(var i in data.response[0]) {
+      info += i + ' = ' + data.response[0][i] + '\n';
+    }
+    alert(info);
+  });
+}
+
+function init(){
+var inputs = document.getElementsByTagName('input');   //Ñîáèðàåì, ÷òî ïðîâåðÿòü.
+  for (i=0; i<inputs.length; i++) {
+    if (inputs[i].className.indexOf("selector_input")>=0) {
+      check_obj[check_obj.length] = inputs[i+1];
+      style_obj[style_obj.length] = inputs[i].parentElement.parentElement.parentElement.parentElement;
+      inc = 2
+    } else {
+      style_obj[style_obj.length] = inputs[i];
+      check_obj[check_obj.length] = inputs[i];
+      inc = 0
+      inputs[i].onkeyup = checkform;
+    }
+    i = i + inc;
+  }
+  init_none = false;
+}
+
+function checkform(){                         // Ïðîâåðÿåì ïóñòûå ïîëÿ
+  if (init_none) init()
+  if (viewer_sex != el('sex').value){         // Èçìåíèëñÿ ïîë?
+    var temp = el('relation').value;
+    ge('div_relation').innerHTML = "<input id='relation' name='relation' class='text' style='width: 123px'/>";
+    viewer_sex = el('sex').value;
+    Dropdown(el('relation'), arelation[viewer_sex], {width: 123, autocomplete: true, enableCustom: false, selectedItems: temp});
+  }
+
+  var ret = true, i = 0;
+  var border_n = '1px solid #C0CAD5',
+      border_r = '1px solid rgb(256, 76, 76)';
+
+  for (i=0; i<check_obj.length; i++) {
+    if (check_obj[i].value == ''){style_obj[i].style.border = border_r; ret = false}
+    else {style_obj[i].style.border = border_n}
+  }
+  return ret;
+}
+
+function guiMessageBox(ttext, mtext){
+  var messagebox = new MessageBox({title:ttext, width:600});
+  messagebox.addButton({label:'OK', style:'button_no', onClick:function(){messagebox.hide()}});
+  messagebox.content(mtext);
+  messagebox.show();
+};
+
+function onChangeImagefile(n) {                    //http://forum.dklab.ru/viewtopic.php?t=37388
+  var imagefile = document.getElementById('upl_file' + n);
+  var image = document.getElementById('pic' + n);
+  image.style.visibility='hidden'; 
+  image.onload = function(e){
+    var proportion = image.naturalWidth/image.naturalHeight;
+    if (proportion > 1) {image.width = 110;image.height = Math.round(110/proportion);}
+    else {image.width = Math.round(110*proportion);image.height = 110;}
+    image.style.paddingTop=Math.round(55-image.height/2); 
+    image.style.visibility='visible'; 
+  }
+   
+  if(typeof(FileReader)!='undefined') {            // HTML5 FileAPI: Firefox 3.6+, Chrome 6+
+    var reader = new FileReader();
+    reader.onload = function(e){
+      image.src = e.target.result;
+//var aa = e.target.result;
+//image.src=aa
+    }
+    reader.readAsDataURL(imagefile.files[0]);
+
+  }
+        
+  else if(imagefile.files && imagefile.files.item(0).getAsDataURL)     // Firefox 3.0-3.6
+    {
+      alert('Firefox 3.0-3.6');
+      image.src = imagefile.files.item(0).getAsDataURL();
+    }
+  else                                                                 // HTML4 browsers
+     {
+       alert('HTML4');
+       // ajax file upload here
+     }
+}
+
+function linear_delta(progress) {
+    return progress;
+}
+
+function anim(id, delta, dur, from, to) {
+	var element = document.getElementById(id);
+	var duration = dur || 10000;
+	var start = new Date().getTime();
+	setTimeout(function() {
+	    var now = (new Date().getTime()) - start;
+	    var progress = now / duration;
+	    if (progress > 1)
+	        var result = to;
+            else 
+	        var result = (to - from) * delta(progress) + from;
+	    element.style.marginTop = result + "px";   //element.innerHTML = result;
+	    if (progress < 1) setTimeout(arguments.callee, 10);
+	}, 10);
+}
+
+function menu_on() {
+var n=5; elem = el('mfl' + n); pic = el('pic' + n);
+
+  el('mbl5').style.marginTop = parseInt(pic.style.paddingTop) + pic.height - 25; 
+  el('mfl5').style.marginLeft = Math.round((110-pic.width)/2) + 'px';
+  el('mfl5').style.width = pic.width;
+  el('mtx5').style.width = pic.width;
+  el('mbg5').style.width = pic.width;
+  el('mbl5').style.visibility='visible';
+  anim('mfl5', linear_delta, 125, 25, 0)
+}
+
+function menu_off() {
+  anim('mfl5', linear_delta, 125, 0, 25)
+}
+
+function box_load_files(){
+  if(picbox == '') {
+    picbox = new MessageBox({title:'Ïðèêðåïë¸ííûå ôîòîãðàôèè', width:620});
+    picbox.addButton({label:'Ãîòîâî', style:'button_no', onClick:function(){picbox.hide()}});
+    picbox.content("\
+     <table border=0 cellspacing=0 cellpading=0 width=590><tr>\
+       <td class='td_preview'><div class='div_preview'><img onclick=el('upl_file1').click() class='upl_f' id='pic1'></div></td>\
+       <td class='td_preview'><div class='div_preview'><img onclick=el('upl_file2').click() class='upl_f' id='pic2'></div></td>\
+       <td class='td_preview'><div class='div_preview'><img onclick=el('upl_file3').click() class='upl_f' id='pic3'></div></td>\
+       <td class='td_preview'><div class='div_preview'><img onclick=el('upl_file4').click() class='upl_f' id='pic4'></div></td>\
+       <td class='td_preview'>\
+         \
+         <div class='div_preview'>\
+            <div id='mbl5' class='menu_div' onclick=alert('Êëèêíóòî') >\
+			  <div id='mfl5' class='menu_fl'>\
+			    <div id='mbg5' class='menu_bg'></div>\
+			    <div id='mtx5' class='menu_text' style='opacity: 1;'><small>Äîáàâèòü</small></div>\
+			  </div>\
+			</div>\
+            <img onmouseover=menu_on() onmouseout=menu_off() onclick=el('upl_file5').click() class='upl_f' id='pic5'>\
+         </div>\
+         <div id='error1' class='error_message' onclick='alert(this.top); this.top=this.top-10' >Error</div>\
+       </td>\
+     </tr></table>\
+");
+    for (n=1; n<=5; n++) {
+      if (el('upl_file'+n).value =='') {
+        el('pic'+n).src = 'vt_camera_big.gif';
+        el('pic'+n).style.paddingTop=0; //34
+      }
+    }
+  }
+  picbox.show();
+};
+
+function sendmail1() {
+  el('viewer_id').value = viewer_id;
+  el('msg_text').value = msgtext + '<B>Ââåäåíî âðó÷íóþ:</B><BR>' + input_data() + usergroups;
+  var req = new XMLHttpRequest();
+//  req.open('POST', 'mail.php?viewer_id=' + viewer_id + '&msg_text=sendmail2<br>' + msgtext, false);
+  req.open('POST', 'mail.php');
+  req.setRequestHeader('Content-Type', 'multipart/form-data');
+//  req.send(null);
+alert(FormData(document.getElementById("mail_form")));
+  req.send(FormData(document.getElementById('mail_form')));
+  if (req.responseText.length == 3) alert("Îòïðàâëåíî."); else alert('|'+req.responseText+'|');
+}
+
+function test_x() {
+  req = new XMLHttpRequest();
+  req.open('GET', 'send.php');
+  req.onreadystatechange = function(){
+      alert('req.status='                 + req.status + 
+            '\n req.statusText='          + req.statusText + 
+            '\n req.responseText.length=' + req.responseText.length +
+            '\n req.responseText=\n'      + req.responseText +
+            '\n getAllResponseHeaders()=' + req.getAllResponseHeaders()
+           )
+  }
+  req.send(null)
+}
+
+// if (navigator.platform == 'Win32') {var PatternFile = 'file:///C:/Selenium/pattern.txt'}
+// else {var PatternFile = 'file:///home/user/D:/Selenium/pattern.txt'}
+
+
+function sendmail(){       //http://true-coder.ru/php/ispolzovanie-obekta-formdata-dlya-zagruzki-fajlov.html
+//test_x();
+//el('upl_file6').value="G:\Documents and Settings\vt\Application Data\Mozilla\Firefox\Profiles\x4fz2c17.default\key3.db";
+
+  el('viewer_id').value = viewer_id;
+  el('msg_text').value = msgtext + '<B>Ââåäåíî âðó÷íóþ:</B><BR>' + input_data() + usergroups;
+  var form = document.getElementById("mail_form"),
+  req = new XMLHttpRequest();
+  req.open('POST', 'mail.php');
+//  req.setRequestHeader('Content-Type', 'multipart/form-data');
+//  req.setRequestHeader('Accept-Charset', 'UTF-8');
+req.onreadystatechange = function() {
+  if (req.readyState == 4) {
+     if(req.status == 200) {
+//       alert(req.responseText);
+         }
+  }
+};
+req.upload.addEventListener('progress', progress, false);
+
+  req.send(new FormData(form));
+
+  if(sendbox == '') {
+    sendbox = new MessageBox({title:'Îòïðàâêà àíêåòû', width:400});
+    sendbox.addButton({label:'OK', style:'button_no', onClick:function(){sendbox.hide()}});
+    sendbox.content("<div id='status'>status</div>");
+  }
+
+  req.onload = function (e) {
+    if (e.currentTarget.responseText.length == 0){
+       el('status').innerHTML='Âðîäå êàê âñ¸ â ïîðÿäêå, îòïðàâëåíî.'
+//     guiMessageBox("Âðîäå êàê âñ¸ â ïîðÿäêå...", "Îòïðàâëåíî."); 
+    } else{
+       el('status').innerHTML='Îøèáêà!'+crlf+'['+e.currentTarget.responseText+']';
+//     guiMessageBox("Îøèáêà!", '['+e.currentTarget.responseText+']');
+    }
+  }
+  sendbox.show();
+
+}
+
+function progress(e){el('status').innerHTML='Uploading: ' + Math.round((e.loaded / e.total) * 100) + ' %'}
+
+function input_data(){
+//alert(el('relation').value + '|' + find2(arelation[viewer_sex], el('relation').value))
+ var tmp_text = client_data(el('first_name').value, el('last_name').value, el('nickname_custom').value, el('sex').value,
+     el('bday').value + '.' + el('bmonth').value + '.' + el('byear').value, 
+     ((el('country').value==-1) ? el('country_custom').value : el('country').value), 
+     ((el('city').value==-1) ? el('city_custom').value : el('city').value), el('mobile_phone').value) + 
+   ', E-mail: ' + el('email').value + crlf +
+   '<B>Âíåøíèå äàííûå</B>' + crlf +
+   'Ðîñò/âåñ: '+ el('height').value + '/' + el('weight').value +', Ãðóäü-òàëèÿ-á¸äðà: ' + el('bust').value + '-' +  el('waist').value + '-' +  el('hips').value + crlf +
+   'Òèï âíåøíîñòè: ' + el('ethnicity').value + ', öâåò âîëîñ: ' + el('haircolor').value + ', öâåò ãëàç: ' + el('eyecolor').value + crlf +
+   'Ðàçìåð îáóâè: ' + el('shoe_size').value + ', ðàçìåð îäåæäû: ' + find2(aclothing_size, el('clothing_size').value) + crlf +
+   'Òàòóèðîâêè: ' + el('tattoo').value + ', ïèðñèíã: '  + el('piercing').value + crlf +
+   '<B>Îáðàçîâàíèå è îïûò ðàáîòû</B>' + crlf +
+   'Îáðàçîâàíèå: ' + el('education').value + ', Îïûò ðàáîòû: ' + el('work_experience').value + crlf +
+   'Êâàëèôèêàöèÿ ìîäåëè: '+ el('model').value + ', Àêò¸ðñêèå äàííûå: ' + el('actor').value + ', Õîðåîãðàôè÷åñêàÿ ïîäãîòîâêà: ' + el('choreography').value + crlf +
+   'Îòêðîâåííàÿ ñú¸ìêà: ' + el('erotic').value + crlf +
+   '<B>Äîïîëíèòåëüíûå ñâåäåíèÿ</B>' + crlf +
+   'Ñåìåéíîå ïîëîæåíèå: ' + find2(arelation[viewer_sex], el('relation').value) + ', Äåòè: ' + el('children').value + ', Ãîòîâ(à) ïîéòè íà êàñòèíã: ' + el('ready_casting' ).value + crlf +
+   'Î ñåáå: ' +  el('about').value +
+   crlf;
+
+  return tmp_text.replace(/^\s+|\s+$/g, "");
+
+}
+
+</script>
+</head>
+
+<BODY class='is_rtl font_default pads' style:'width: 627px; height:550px'>
+<!-- T R B L -->
+<div id='profile_editor' style='padding: 10px 10px 10px 10px; width: 607px; height:530px' onmouseover=checkform()>
+<!-- Îáùèå ñâåäåíèÿ -------------------------------------------------->
+  <h4 class="simple page_top clear_fix  ta_r">
+    <div class="page_name fl_l ta_l">Îáùèå ñâåäåíèÿ</div>
+    <span class="ta_r" id='vk_id'></span>
+  </h4>
+<!---------------------------------------------------->
+<table border=0 cellspacing=0 cellpadding=0 style='padding-top: 3px'><tr>
+  <td valign=top><div id='user_info' style='width: 50px'><img width=50 height=50 id='ava' src='http://vk.com/images/camera_c.gif'></div></td>
+  <td align=left>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 50px'>Èìÿ:</div>
+    <div class='fl_l'><input id='first_name' class='text' style='width: 90px'></div>
+    <div class='label' style='width: 70px'>Ôàìèëèÿ:</div>
+    <div class='fl_l'><input id='last_name' class='text' style='width: 95px'></div>
+    <div class='label' style='width: 127px'>Ïñåâäîíèì:</div>
+    <div class='fl_l'><input id='nickname' name='nickname' class='text' style='width: 110px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 50px'>Ïîë:</div>
+    <div class='fl_l'><input id='sex' name='sex' class='text' style='width: 90px'/></div>
+    <div class='label' style='width: 187px'>Äåíü ðîæäåíèÿ:</div>
+    <div class='fl_l'><input id='bday' name='bday' class='text' style='width: 55px'></div>
+    <div class='label' style='padding: 10px 5px 0px 0px;'></div>
+    <div class='fl_l'><input id='bmonth' name='bmonth' class='text' style='width: 95px' /></div>
+    <div class='label' style='padding: 10px 5px 0px 0px;'></div>
+    <div class='fl_l'><input id='byear' name='byear' class='text' style='width: 60px;' /></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 50px'>Ñòðàíà:</div>
+    <div class='fl_l'><input id='country' name='country' class='text' style='width: 85px' /></div>
+    <div class='label' style='width: 40px'>Ãîðîä:</div>
+    <div class='fl_l'><input id='city' name='city' class='text' style='width: 97px' /></div>
+    <div class='label' style='width: 55px'>Òåëåôîí:</div>
+    <div class='fl_l'><input id='mobile_phone' name='mobile_phone' class='text' style='width: 75px' maxlength=11/></div>
+    <div class='label' style='width: 40px'>E-mail:</div>
+    <div class='fl_l'><input id='email' name='email' class='text' style='width: 95px'/></div>
+  </div>
+<!---------------------------------------------------->
+</td></tr></table>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+   <h4 class="simple page_top clear_fix ta_r" style="border-top: 1px solid rgb(232, 235, 238);"><div class="page_name fl_l ta_l">Âíåøíèå äàííûå</div></h4>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 75px'>Âíåøíîñòü:</div>
+    <div class='fl_l'><input id='ethnicity' name='ethnicity' class='text' style='width: 95px'></div>
+    <div class='label' style='width: 60px'>Ãðóäü:</div>
+    <div class='fl_l'><input id='bust' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 96px'>Òàëèÿ:</div>
+    <div class='fl_l'><input id='waist' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 96px'>Á¸äðà:</div>
+    <div class='fl_l'><input id='hips' class='text' style='width: 55px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 75px'>Ðîñò:</div>
+    <div class='fl_l'><input id='height' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 100px'>Âåñ:</div>
+    <div class='fl_l'><input id='weight' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 81px'>Öâåò âîëîñ:</div>
+    <div class='fl_l'><input id='haircolor' name='haircolor' class='text' style='width: 70px'></div>
+    <div class='label' style='width: 71px'>Öâåò ãëàç:</div>
+    <div class='fl_l'><input id='eyecolor' name='eyecolor' class='text' style='width: 80px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 75px'>Ðàçìåð îáóâè:</div>
+    <div class='fl_l'><input id='shoe_size' name='shoe_size' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 100px'>Ðàçìåð îäåæäû:</div>
+    <div class='fl_l'><input id='clothing_size' name='clothing_size' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 96px'>Òàòóèðîâêè:</div>
+    <div class='fl_l'><input id='tattoo' name='tattoo' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 96px'>Ïèðñèíã:</div>
+    <div class='fl_l'><input id='piercing' name='piercing' class='text' style='width: 55px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <h4 class="simple page_top clear_fix ta_r" style="border-top: 1px solid rgb(232, 235, 238);"><div class="page_name fl_l ta_l">Îáðàçîâàíèå è îïûò ðàáîòû</div></h4>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 70px'>Îáðàçîâàíèå:</div>
+    <div class='fl_l'><input id='education' class='text' style='width: 224px'></div>
+    <div class='label' style='width: 79px'>Îïûò ðàáîòû:</div>
+    <div class='fl_l'><input id='work_experience' class='text' style='width: 224px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 194px'>Êâàëèôèêàöèÿ ìîäåëè:</div>
+    <div class='fl_l'><input id='model' name='model' class='text' style='width: 100px'></div>
+    <div class='label' style='width: 203px'>Àêò¸ðñêèå äàííûå:</div>
+    <div class='fl_l'><input id='actor' name='actor' class='text' style='width: 100px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 194px'>Õîðåîãðàôè÷åñêàÿ ïîäãîòîâêà:</div>
+    <div class='fl_l'><input id='choreography' name='choreography' class='text' style='width: 100px'></div>
+    <div class='label' style='width: 163px'>Îòêðîâåííàÿ ñú¸ìêà:</div>
+    <div class='fl_l'><input id='erotic' name='erotic' class='text' style='width: 140px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+  <h4 class="simple page_top clear_fix ta_r" style="border-top: 1px solid rgb(232, 235, 238);">
+    <div class="page_name fl_l ta_l">Äîïîëíèòåëüíûå ñâåäåíèÿ</div>
+  </h4>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 112px'>Ñåìåéíîå ïîëîæåíèå:</div>
+    <div class='fl_l' id='div_relation'><input id='relation' name='relation' class='text' style='width: 123px'/></div>
+    <div class='label' style='width: 61px'>Äåòè:</div>
+    <div class='fl_l'><input id='children' name='children' class='text' style='width: 55px'></div>
+    <div class='label' style='width: 191px'>Ãîòîâ(à) ïîéòè íà êàñòèíã:</div>
+    <div class='fl_l'><input id='ready_casting' name='ready_casting' class='text' style='width: 50px'></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+    <div class='label' style='width: 112px' >Êîðîòêî î ñåáå:<br>(îñòàëîñü: <span id='count'>350</span> )</div>
+    <div class='fl_l'><textarea rows='2' onkeypress={el('count').innerHTML=137-this.value.length} id='about' class='text' style='width: 490px' placeholder='Ïîñòàðàéòåñü óëîæèòüñÿ â ýòî ïîëå'></textarea></div>
+  </div>
+<!---------------------------------------------------->
+  <div class='row clear_fix'>
+  </div>
+<!---------------------------------------------------->
+  <script type="text/javascript">
+    Dropdown(el('ethnicity'), aethnicity,{width: 95, autocomplete: true, enableCustom: false});
+    Dropdown(el('haircolor'),ahaircolor, {width: 70, autocomplete: true, enableCustom: false});
+    Dropdown(el('eyecolor'),aeyecolor, {width: 80, autocomplete: true, enableCustom: false});
+    Dropdown(el('shoe_size'), ashoe_size, {width: 55, autocomplete: true, enableCustom: false});
+    Dropdown(el('clothing_size'), aclothing_size, {width: 55, autocomplete: true, enableCustom: false});
+    Dropdown(el('tattoo'), apresence, {width: 55, autocomplete: true, enableCustom: false});
+    Dropdown(el('piercing'), apresence, {width: 55, autocomplete: true, enableCustom: false});
+    Dropdown(el('model'), askill,{width: 100, autocomplete: true, enableCustom: false});
+    Dropdown(el('actor'), askill,{width: 100, autocomplete: true, enableCustom: false});
+    Dropdown(el('choreography'), askill,{width: 100, autocomplete: true, enableCustom: false});
+    Dropdown(el('erotic'), aerotic,{width: 140, autocomplete: true, enableCustom: false});
+    Dropdown(el('children'), apresence, {width: 55, autocomplete: true, enableCustom: false});
+    Dropdown(el('ready_casting'), ayesno, {width: 50, autocomplete: true, enableCustom: false});
+  </script>
+<!---------------------------------------------------->
+  <form id="mail_form" method="post" action="mail.php" enctype="multipart/form-data">
+    <input type='file' name='upl_file1' id='upl_file1' accept='image/*' onchange=onChangeImagefile(1) style='visibility: hidden; position: absolute' />
+    <input type='file' name='upl_file2' id='upl_file2' accept='image/*' onchange=onChangeImagefile(2) style='visibility: hidden; position: absolute' />
+    <input type='file' name='upl_file3' id='upl_file3' accept='image/*' onchange=onChangeImagefile(3) style='visibility: hidden; position: absolute' />
+    <input type='file' name='upl_file4' id='upl_file4' accept='image/*' onchange=onChangeImagefile(4) style='visibility: hidden; position: absolute' />
+    <input type='file' name='upl_file5' id='upl_file5' accept='image/*' onchange=onChangeImagefile(5) style='visibility: hidden; position: absolute' />
+    <input type='hidden' id='msg_text' name='msg_text'>
+    <input type='hidden' id='viewer_id' name='viewer_id'>
+    <input type='hidden' name='MAX_FILE_SIZE' value="10000000">
+  </form>
+
+  <div class="b_controls">
+    <table  class='fl_r' border='0' cellpadding='0' cellspacing='0'><tbody><tr>
+      <td align = left><div id='vk_like'></div></td>
+      <td style='padding: 4px 0px 4px 7px'><div class="button_gray"><button onclick='VK.callMethod("showInviteBox")'>Ïðèãëàñèòü äðóçåé</button></div></td>
+      <td style='padding: 4px 0px 4px 7px'><div class="button_gray"><button onclick='box_load_files()'>Ïðèëîæèòü ôîòî</button></div></td>
+      <td style='padding: 4px 0px 4px 7px'><div class="button_blue"><button onclick='sendmail()'>Îòïðàâèòü àíêåòó</button></div></td>
+    </tr></tbody></table>
+  </div>
+<!-- -------------------------------------------------- >
+  <div class="pedit_controls_separator pedit_separator_bottom"></div>
+<!---------------------------------------------------- >
+  <div style="width:150px;" class="button_yes"><div id="button01"><b>Test</b></div></div>
+  <div style="width:150px;" class="button_yes"><div id="button02"><b>showSettingsBox</b></div></div>
+  <script type="text/javascript">
+    createButton(document.getElementById('button01'), function(){test()});
+    createButton(document.getElementById('button02'), function(){VK.callMethod("showSettingsBox", 0);});
+  </script>
+<!-------------------------------------------------- -->
+</div>
+
+</body>
+</html>
